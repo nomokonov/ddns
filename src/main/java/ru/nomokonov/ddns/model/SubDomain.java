@@ -9,6 +9,7 @@ public class SubDomain {
     private String type;
     private String subdomain;
     private String content;
+    private String operation;
 
     public SubDomain() {
     }
@@ -75,6 +76,14 @@ public class SubDomain {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 }
 

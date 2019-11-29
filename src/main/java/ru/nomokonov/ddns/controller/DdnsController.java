@@ -28,7 +28,6 @@ public class DdnsController {
             @RequestParam(defaultValue = "hostname") String myip) {
 
         String clientIp = httpServletRequest.getRemoteAddr();
-        SubDomain subDomain = yandexDns.getSubDomainList();
         String result = yandexDns.setNewIp(clientIp,myip,hostname);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

@@ -39,10 +39,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 
-        String password = "123";
-
-        String encrytedPassword = this.passwordEncoder().encode(password);
-//        System.out.println("Encoded password of 123=" + encrytedPassword);
         InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder> //
                 mngConfig = auth.inMemoryAuthentication();
         UserDetails u2 = User.withUsername(env.getProperty("ddnsservice.user"))
