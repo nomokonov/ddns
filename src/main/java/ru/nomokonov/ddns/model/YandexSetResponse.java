@@ -2,7 +2,7 @@ package ru.nomokonov.ddns.model;
 
 public class YandexSetResponse {
     private String domain;
-    private Long    record_id;
+    private Long record_id;
     private SubDomain record;
     private String success;
     private String error;

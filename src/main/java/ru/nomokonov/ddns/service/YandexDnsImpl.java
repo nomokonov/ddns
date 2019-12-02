@@ -1,5 +1,7 @@
 package ru.nomokonov.ddns.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.*;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import ru.nomokonov.ddns.controller.DdnsController;
 import ru.nomokonov.ddns.model.SubDomain;
 import ru.nomokonov.ddns.model.YandexResponse;
 import ru.nomokonov.ddns.model.YandexSetResponse;
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @PropertySource(value = "classpath:yandexApi.properties", encoding = "UTF-8")
 public class YandexDnsImpl implements YandexDns {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DdnsController.class);
 
     private Environment env;
 
@@ -42,12 +46,14 @@ public class YandexDnsImpl implements YandexDns {
 
         } catch (UnknownHostException e) {
             e.printStackTrace();
+            LOGGER.info("server error = bad param or ip not resolve " );
             return "server error = bad param or ip not resolve";
         }
 
         if (!ipHostname.equals(ipFromParam)) {
             return setNewIpForDomain(subDomain.getRecord_id(), ipFromParam);
         }
+        LOGGER.info("no cnahge ip" );
         return "no cnahge ip";
 
     }
@@ -68,8 +74,10 @@ public class YandexDnsImpl implements YandexDns {
 
         YandexSetResponse result = response.getBody();
         if (result.getSuccess().equals("ok")) {
+            LOGGER.info("set new ip " + result.getRecord().getContent() );
             return "set new ip:" + result.getRecord().getContent();
         }
+        LOGGER.info("ERROR -  " +result.getError() );
         return "error set new ip in Yandex";
     }
 
@@ -90,7 +98,6 @@ public class YandexDnsImpl implements YandexDns {
                     x -> x.getSubdomain().equals(env.getProperty("yandex.subdomain"))).collect(Collectors.toList()
             );
             if (subDomains.size() > 0) {
-
                 return subDomains.get(0);
             }
         }
